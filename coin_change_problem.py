@@ -6,12 +6,13 @@ Language: Python 2.7
 
 def target_ways(target, coins_list, known_values):
     """
-    Function to compute minimum number of ways to get target amount
-    Input: target       - amount number
-           coins_list   - list of distinct coin values
-           known_values - list of cached values
-    Return: min_coins   - minimum number of coins required
+    INPUT: This funciton takes in a target amount and a list of possible coins to use.
+    It also takes a third parameter, known_results, indicating previously calculated results.
+    The known_results parameter shoud be started with [0] * (target+1)
+    
+    OUTPUT: Minimum number of coins needed to make the target.
     """
+    # Default output to target
     min_coins = target
 
     # Base case: if target is in coins_list
@@ -19,20 +20,21 @@ def target_ways(target, coins_list, known_values):
         known_values[target] = 1
         return 1
 
-    # check for entry in cache
+    # Return a known result if it happens to be greater than 1
     elif known_values[target] > 0:
         return known_values[target]
 
     else:
+        # for every coin value that is <= than target
         for coin_value in [each_coin for each_coin in coins_list if each_coin <= target]:
 
             # Recursive function call with subtracted coin amount
             number_coins = 1 + target_ways(target-coin_value, coins_list, known_values)
 
-            # if new minimum is found then replace
+            # Reset Minimum if we have a new minimum
             if number_coins < min_coins:
                 min_coins = number_coins
-                # store result for future use
+                # Reset the known result
                 known_values[target] = min_coins
 
     return min_coins
